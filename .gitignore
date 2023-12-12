@@ -1,0 +1,22 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/slnx.sqlite
+/.vs/TradingBot/FileContentIndex/689b7557-99cd-40f3-b1a1-e81487c57b42.vsidx
+/.vs/TradingBot/v17
+/.vs/TradingBot/v17/.wsuo
+/.vs/VSWorkspaceState.json
+/Bot.Runtime/.vs/Bot.Runtime/FileContentIndex/6a27904b-6c3c-437f-8640-dd70dd15693f.vsidx
+/Bot.Runtime/.vs/Bot.Runtime/FileContentIndex/83943608-395e-4d6e-be2f-57b3b8161cd5.vsidx
+/Bot.Runtime/.vs/Bot.Runtime/FileContentIndex/abf4497d-0ed9-4efb-bbff-fd54439190ab.vsidx
+/Bot.Runtime/.vs/Bot.Runtime/FileContentIndex/e0b4eac1-ec9e-4757-a103-b5fb0013f8cb.vsidx
+/Bot.Runtime/.vs/Bot.Runtime/FileContentIndex/f7f5681b-3cdb-4685-a05a-042a864bbdc0.vsidx
+/Bot.Runtime/.vs/ProjectEvaluation/bot.runtime.metadata.v7.bin
+/Bot.Runtime/.vs/ProjectEvaluation/bot.runtime.projects.v7.bin
+/Bot.Runtime/bin/Debug/net8.0
+/Bot.Runtime/obj
+/CSharpClient/activex/bin/Release
+/CSharpClient/activex/obj
+/CSharpClient/client
+/.vs/TradingBot/FileContentIndex/2f58d65d-1d60-43ea-bd21-8e94b78644a8.vsidx
