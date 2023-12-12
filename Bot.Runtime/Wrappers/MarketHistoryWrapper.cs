@@ -1,9 +1,4 @@
 ﻿using IBApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bot.Runtime.Wrappers
 {
@@ -141,7 +136,11 @@ namespace Bot.Runtime.Wrappers
 
         public void historicalData(int reqId, Bar bar)
         {
-             
+            Console.WriteLine($"Time: {bar.Time}");
+            Console.WriteLine($"High: {bar.High}");
+            Console.WriteLine($"Low: {bar.Low}");
+            Console.WriteLine($"Price Open: {bar.Open}");
+            Console.WriteLine($"Price Close: {bar.Close}");
         }
 
         public void historicalDataEnd(int reqId, string start, string end)
