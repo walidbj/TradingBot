@@ -20,3 +20,5 @@
 /CSharpClient/activex/obj
 /CSharpClient/client
 /.vs/TradingBot/FileContentIndex/2f58d65d-1d60-43ea-bd21-8e94b78644a8.vsidx
+*.v2
+*.vsidx
