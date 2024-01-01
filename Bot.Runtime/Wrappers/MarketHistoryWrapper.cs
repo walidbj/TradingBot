@@ -1,9 +1,36 @@
-﻿using IBApi;
+﻿using Bot.Runtime.Events;
+using Bot.Runtime.Helpers;
+using IBApi;
+using System.ComponentModel;
 
 namespace Bot.Runtime.Wrappers
 {
-    public class MarketHistoryWrapper : EWrapper
+    public class MarketHistoryWrapper : EWrapper, INotifyPropertyChanged
     {
+
+        // Event to notify when historical data is received
+        public event EventHandler<HistoricalDataEventArgs> HistoricalDataReceived;
+
+        public event EventHandler<bool> HistoryReceived;
+        public List<Bar> Bars { get; set; } = new List<Bar>();
+        private Bar _currentBar;
+        public Bar CurrentBar { get { return _currentBar; }
+            set
+            {
+                if (value != _currentBar)
+                {
+                    _currentBar = value;
+                    OnPropertyChanged(nameof(_currentBar));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
         public void accountDownloadEnd(string account)
         {
              
@@ -136,16 +163,44 @@ namespace Bot.Runtime.Wrappers
 
         public void historicalData(int reqId, Bar bar)
         {
-            Console.WriteLine($"Time: {bar.Time}");
-            Console.WriteLine($"High: {bar.High}");
-            Console.WriteLine($"Low: {bar.Low}");
-            Console.WriteLine($"Price Open: {bar.Open}");
-            Console.WriteLine($"Price Close: {bar.Close}");
+            //Console.WriteLine($"Time: {bar.Time}");
+            //Console.WriteLine($"High: {bar.High}");
+            //Console.WriteLine($"Low: {bar.Low}");
+            //Console.WriteLine($"Price Open: {bar.Open}");
+            //Console.WriteLine($"Price Close: {bar.Close}");
+            
+            Bars.Add( bar );
+            OnHistoricalData(reqId, bar);
+        }
+
+        // Event handler for historical data
+        protected virtual void OnHistoricalData(int reqId, Bar bar)
+        {
+            HistoricalDataReceived?.Invoke(this, new HistoricalDataEventArgs(reqId, bar));
         }
 
         public void historicalDataEnd(int reqId, string start, string end)
         {
-             
+            OnHistoricalDataEnd();
+            /*Bars = TechnicalIndicatorHelper.CalculateSuperTrend(Bars);
+
+            var currentBar = Bars.Last();
+            if(currentBar != null)
+            {
+                if (currentBar.InUpTrend && !CurrentBar.InUpTrend)
+                    Console.WriteLine($"trend changed to positif at : {currentBar.Time}");
+                else if (!currentBar.InUpTrend && CurrentBar.InUpTrend)
+                    Console.WriteLine($"trend changed to negatif at : {currentBar.Time}");
+                CurrentBar = Bars.Last();
+            }
+            
+            var test = Bars.Where(b => b.InUpTrend).OrderBy(b => b.Time).ToList();
+             Console.WriteLine(Bars);*/
+        }
+
+        protected virtual void OnHistoricalDataEnd()
+        {
+            HistoryReceived?.Invoke(this, true);
         }
 
         public void historicalDataUpdate(int reqId, Bar bar)
