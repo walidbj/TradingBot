@@ -61,5 +61,8 @@ namespace IBApi
          * @brief The number of trades during the bar's timespan (only available for TRADES) 
          */
         public int Count { get; private set; }
+
+        public bool InUpTrend { get; set; }
+        public double SuperTrend { get; set; }
     }
 }

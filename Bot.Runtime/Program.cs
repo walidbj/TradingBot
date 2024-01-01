@@ -1,18 +1,21 @@
-﻿using Bot.Runtime.Wrappers;
+﻿using Bot.Runtime.Events;
+using Bot.Runtime.Helpers;
+using Bot.Runtime.Wrappers;
 using IBApi;
-using System.Diagnostics.Contracts;
-using TwsRtdServer;
 
 namespace Bot.Runtime
 {
     public class Program
     {
+        public static List<IBApi.Bar> HistoricalBars { get; set; } = new List<IBApi.Bar>();
         private static async Task Main(string[] args)
         {
             try
             {
+
+
                 // Input parameters
-                string stockCode = "GOOGL"; // Replace with your desired stock code
+                string stockCode = "RILY"; // Replace with your desired stock code
                 string duration = "1 D"; // Replace with your desired duration
 
                 // IBKR connection details
@@ -57,7 +60,15 @@ namespace Bot.Runtime
                     string endDateTime = DateTime.UtcNow.ToString("yyyyMMdd-hh:mm:ss");
                     string genericTickList = "233"; // Super Trend indicator
 
-                    ibkrClient.reqHistoricalData(requestId, contract, endDateTime, duration, "5 secs", "TRADES", 1, 1, false, null);
+        
+
+                    DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 9, 30, 0);
+
+                    ibkrWrapper.HistoricalDataReceived += HistoricalDataHandler;
+                    ibkrWrapper.HistoryReceived += HistoryReceivedDatahandler;
+                    ibkrClient.reqHistoricalData(requestId, contract, DateTime.Now.ToString("yyyyMMdd-hh:mm:ss"), duration, "5 secs", "TRADES", 1, 1, false, null);
+
+
 
                     // Wait for market data to arrive (you may need to adjust the timing based on your needs)
                     await Task.Delay(5000);
@@ -78,6 +89,19 @@ namespace Bot.Runtime
             }
             
         }
-    
+
+        private  static void HistoryReceivedDatahandler(object? sender, bool e)
+        {
+            HistoricalBars =  TechnicalIndicatorHelper.CalculateSuperTrend(HistoricalBars);
+        }
+
+        private  static void HistoricalDataHandler(object sender, HistoricalDataEventArgs e)
+        {
+            // Access and process the historical data in the Main function
+            var historicalData = e.Bar;
+            HistoricalBars.Add(historicalData);
+            Console.WriteLine($"Time: {historicalData.Time}, Open: {historicalData.Open}, High: {historicalData.High}, Low: {historicalData.Low}, Close: {historicalData.Close}");
+        }
+
     }
 }
